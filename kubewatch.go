@@ -7,11 +7,14 @@ package main
 import (
 
 	// Stdlib:
-	"encoding/json"
+	// "encoding/json"
 	"fmt"
 	"os"
 	"reflect"
 	"time"
+
+	// Telegram
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 
 	// Kubernetes:
 	"k8s.io/client-go/kubernetes"
@@ -35,7 +38,6 @@ import (
 //-----------------------------------------------------------------------------
 
 var (
-
 	// Root level command:
 	app = kingpin.New("kubewatch", "Watches Kubernetes resources via its API.")
 
@@ -57,11 +59,18 @@ var (
 
 	flgFlatten = app.Flag("flatten",
 		"Whether to produce flatten JSON output or not.").Bool()
-
+	
+	argAPI = app.Flag("telegramapi", 
+		"API Key for Telegram bot").Required().String()
+	
+	argGroup = app.Flag("telegramgroup",
+		"Group that the bot should post to").Required().Int64()
 	// Arguments:
 	argResources = app.Arg("resources",
 		"Space delimited list of resources to be watched.").
 		Required().HintOptions(resources...).Enums(resources...)
+
+
 )
 
 //-----------------------------------------------------------------------------
@@ -182,8 +191,8 @@ func watchResource(clientset *kubernetes.Clientset, resource, namespace string) 
 	_, controller := cache.NewInformer(
 		listWatch, resourceObject[resource].runtimeObject,
 		time.Second*0, cache.ResourceEventHandlerFuncs{
-			AddFunc:    printEvent,
-			DeleteFunc: printEvent,
+			AddFunc:    outputEvent,
+			DeleteFunc: outputEvent,
 		},
 	)
 
@@ -198,40 +207,39 @@ func watchResource(clientset *kubernetes.Clientset, resource, namespace string) 
 // printEvent:
 //-----------------------------------------------------------------------------
 
-func printEvent(obj interface{}) {
+func outputEvent(obj interface{}) {
+	bot, err := tgbotapi.NewBotAPI( *argAPI )
 
-	// Variables:
-	var jsn []byte
-	var err error
-
-	// Marshal obj into JSON:
-	if jsn, err = json.Marshal(obj); err != nil {
-		log.Error("Ops! Cannot marshal JSON")
-		return
+	if err != nil {
+		log.Panic(err)
 	}
 
-	if *flgFlatten {
+	// bot.Debug = true
 
-		// Unmarshal JSON into dat:
-		dat := strIfce{}
-		if err = json.Unmarshal(jsn, &dat); err != nil {
-			log.Error("Ops! Cannot unmarshal JSON")
-			return
-		}
+	// log.Printf("Authorized on account %s", bot.Self.UserName)
 
-		// Flatten dat into r:
-		r := strIfce{}
-		flatten(r, "kubewatch", reflect.ValueOf(dat))
+	u := tgbotapi.NewUpdate(0)
+	u.Timeout = 60
 
-		// Marshal r into JSON:
-		if jsn, err = json.Marshal(r); err != nil {
-			log.Error("Ops! Cannot marshal JSON")
-			return
-		}
+	switch v := obj.(type) {
+	case *v1.Pod:
+		// mObj := v.(*v1.Pod)
+		printPod(v, bot)
 	}
 
-	// Print to stdout:
-	fmt.Printf("%s\n", jsn)
+}
+
+func printPod(v *v1.Pod, bot *tgbotapi.BotAPI) {
+	group := int64(-1) * *argGroup
+
+	if len(v.OwnerReferences) > 0 {
+		msg := tgbotapi.NewMessage(group, fmt.Sprintf("Pod: %s changed state to %s\n", v.OwnerReferences[0].Name, v.Status.Phase))
+		bot.Send(msg)
+
+	} else {
+		msg := tgbotapi.NewMessage(group, fmt.Sprintf("Pod: %s changed state to %s\n", v.GetName(), v.Status.Phase))
+		bot.Send(msg)
+	}
 }
 
 //-----------------------------------------------------------------------------
