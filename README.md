@@ -43,7 +43,11 @@ Flags:
       --flatten                  Whether to produce flatten JSON output or not.
       --telegramapi=TELEGRAMAPI  API Key for Telegram bot
       --telegramgroup=TELEGRAMGROUP
-                                 Group that the bot should post to
+                                 Group that the bot should post to. Note that
+                                 Telegram groups are negative values, but drop
+                                 the - here. If you wish to message an
+                                 individual, you will need to add a negative on
+                                 the command line
       --version                  Show application version.
 
 Args:

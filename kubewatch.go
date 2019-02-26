@@ -64,7 +64,9 @@ var (
 		"API Key for Telegram bot").Required().String()
 
 	argGroup = app.Flag("telegramgroup",
-		"Group that the bot should post to").Required().Int64()
+		`Group that the bot should post to. 
+Note that Telegram groups are negative values, but drop the - here. 
+If you wish to message an individual, you will need to add a negative on the command line`).Required().Int64()
 	// Arguments:
 	argResources = app.Arg("resources",
 		"Space delimited list of resources to be watched.").
