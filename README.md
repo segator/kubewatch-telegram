@@ -10,8 +10,8 @@
 [GoReportCard Widget]: https://goreportcard.com/badge/prg3/kubewatch-telegram
 [Travis]: https://travis-ci.org/prg3/kubewatch-telegram
 [Travis Widget]: https://travis-ci.org/prg3/kubewatch-telegram.svg?branch=master
-[DockerHub]: https://hub.docker.com/r/prg3/kubewatch-telegram
-[DockerHub Widget]: https://img.shields.io/docker/pulls/prg3/kubewatch-telegram.svg
+[DockerHub]: https://hub.docker.com/r/majestik/kubewatch-telegram
+[DockerHub Widget]: https://img.shields.io/docker/pulls/majestik/kubewatch-telegram.svg
 
 Kubernetes API event watcher with output to Telegram.
 

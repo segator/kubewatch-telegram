@@ -6,7 +6,7 @@ go:
   - 1.8
 
 install:
-  - go get github.com/softonic/kubewatch
+  - go get github.com/prg3/kubewatch
 
 script:
   - true
