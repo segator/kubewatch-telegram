@@ -13,7 +13,7 @@
 [DockerHub]: https://hub.docker.com/r/majestik/kubewatch-telegram
 [DockerHub Widget]: https://img.shields.io/docker/pulls/majestik/kubewatch-telegram.svg
 
-Kubernetes API event watcher with output to Telegram.
+Kubernetes API event watcher with output to Telegram based on code from https://github.com/softonic/kubewatch.
 
 ##### Install
 
