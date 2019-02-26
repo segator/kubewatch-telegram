@@ -59,18 +59,16 @@ var (
 
 	flgFlatten = app.Flag("flatten",
 		"Whether to produce flatten JSON output or not.").Bool()
-	
-	argAPI = app.Flag("telegramapi", 
+
+	argAPI = app.Flag("telegramapi",
 		"API Key for Telegram bot").Required().String()
-	
+
 	argGroup = app.Flag("telegramgroup",
 		"Group that the bot should post to").Required().Int64()
 	// Arguments:
 	argResources = app.Arg("resources",
 		"Space delimited list of resources to be watched.").
 		Required().HintOptions(resources...).Enums(resources...)
-
-
 )
 
 //-----------------------------------------------------------------------------
@@ -208,7 +206,7 @@ func watchResource(clientset *kubernetes.Clientset, resource, namespace string) 
 //-----------------------------------------------------------------------------
 
 func outputEvent(obj interface{}) {
-	bot, err := tgbotapi.NewBotAPI( *argAPI )
+	bot, err := tgbotapi.NewBotAPI(*argAPI)
 
 	if err != nil {
 		log.Panic(err)
