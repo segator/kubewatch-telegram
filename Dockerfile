@@ -2,7 +2,7 @@
 # Set the base image for subsequent instructions:
 #------------------------------------------------------------------------------
 
-FROM alpine:3.5
+FROM alpine:3.7
 
 #------------------------------------------------------------------------------
 # Environment variables:
@@ -14,7 +14,7 @@ ENV GOPATH="/go"
 # Build and install:
 #------------------------------------------------------------------------------
 
-RUN apk add -U --no-cache -t dev git go musl-dev ca-certificated \
+RUN apk add -U --no-cache -t dev git go musl-dev ca-certificates \
     && go get github.com/prg3/kubewatch \
     && cp ${GOPATH}/bin/kubewatch /usr/local/bin \
     && apk del --purge dev && rm -rf /tmp/* /go \
