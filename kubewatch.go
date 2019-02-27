@@ -152,6 +152,15 @@ func main() {
 		panic(err.Error())
 	}
 
+	// Say Hello to the Telegram users
+	bot, err := tgbotapi.NewBotAPI(*argAPI)
+	if err != nil {
+		log.Panic(err)
+	}
+	group := int64(-1) * *argGroup
+	msg := tgbotapi.NewMessage(group, fmt.Sprintf("Hello from your friendly Telegram Bot starting up"))
+	bot.Send(msg)
+
 	// Watch for the given resource:
 	for _, resource := range *argResources {
 		watchResource(clientset, resource, *flgNamespace)
