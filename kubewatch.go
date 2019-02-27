@@ -233,7 +233,7 @@ func printPod(v *v1.Pod, bot *tgbotapi.BotAPI) {
 	group := int64(-1) * *argGroup
 
 	if len(v.OwnerReferences) > 0 {
-		msg := tgbotapi.NewMessage(group, fmt.Sprintf("Pod: %s changed state to %s\n", v.OwnerReferences[0].Name, v.Status.Phase))
+		msg := tgbotapi.NewMessage(group, fmt.Sprintf("Pod from deployment %s changed state to %s\n", v.OwnerReferences[0].Name, v.Status.Phase))
 		bot.Send(msg)
 
 	} else {
