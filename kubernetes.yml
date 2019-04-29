@@ -62,10 +62,10 @@ spec:
             - name: TELEGRAM_API
               valueFrom:
                 secretKeyRef:
-                  name: telegramBot
+                  name: telegram-bot
                   key: api
             - name: TELEGRAM_GROUPID
               valueFrom:
                 secretKeyRef:
-                  name: telegramBot
+                  name: telegram-bot
                   key: group
