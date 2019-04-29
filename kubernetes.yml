@@ -56,9 +56,9 @@ spec:
           imagePullPolicy: Always
           env:
             - name: K8S_SERVICE
-              value: true
+              value: "true"
             - name: RESOURCES
-              value: "pods events"
+              value: "pods events jobs"
             - name: TELEGRAM_API
               valueFrom:
                 secretKeyRef:
