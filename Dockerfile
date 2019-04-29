@@ -16,8 +16,12 @@ RUN apk add -U --no-cache -t dev git go musl-dev \
     && apk del --purge dev && rm -rf /tmp/* /go \
 	&& rm -rf /var/cache/apk/*
 
+ENV TELEGRAM_API=""
+ENV TELEGRAM_GROUID=""
+
 #------------------------------------------------------------------------------
 # Entrypoint:
 #------------------------------------------------------------------------------
 
 ENTRYPOINT [ "kubewatch" ]
+CMD ["--telegramapi=${TELEGRAM_API}","--telegramgroup=${TELEGRAM_GROUID}"]
