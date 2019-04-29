@@ -55,6 +55,10 @@ spec:
           image: segator/telegram-kubewatch
           imagePullPolicy: Always
           env:
+            - name: K8S_SERVICE
+              value: true
+            - name: RESOURCES
+              value: "pods events"
             - name: TELEGRAM_API
               valueFrom:
                 secretKeyRef:

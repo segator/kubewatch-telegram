@@ -16,12 +16,14 @@ RUN apk add -U --no-cache -t dev git go musl-dev \
     && apk del --purge dev && rm -rf /tmp/* /go \
 	&& rm -rf /var/cache/apk/*
 
+COPY entrypoint.sh /entrypoint.sh
+#RUN chmod +x /entrypoint.sh
 ENV TELEGRAM_API=""
-ENV TELEGRAM_GROUID=""
-
+ENV TELEGRAM_GROUPID=""
+ENV RESOURCES="pods events"
+ENV K8S_SERVICE=false
 #------------------------------------------------------------------------------
 # Entrypoint:
 #------------------------------------------------------------------------------
 
-ENTRYPOINT [ "kubewatch" ]
-CMD ["--telegramapi=${TELEGRAM_API}","--telegramgroup=${TELEGRAM_GROUID}"]
+CMD ["/entrypoint.sh"]
